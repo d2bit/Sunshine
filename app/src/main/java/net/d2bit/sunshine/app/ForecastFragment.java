@@ -1,5 +1,6 @@
 package net.d2bit.sunshine.app;
 
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -80,6 +81,12 @@ public class ForecastFragment extends Fragment {
     public class FetchWeatherTask extends AsyncTask<String, Void, Void> {
 
         private final String LOG_TAG = FetchWeatherTask.class.getSimpleName();
+        private final String FORECAST_BASE_URL = "http://api.openweathermap.org/data/2.5/forecast/daily";
+        private final String QUERY_PARAM = "q";
+        private final String FORMAT_PARAM = "mode";
+        private final String UNITS_PARAM = "units";
+        private final String DAYS_PARAM = "cnt";
+        private final String APIKEY_PARAM = "appid";
 
         /** The system calls this to perform work in a worker thread and
          * delivers it the parameters given to AsyncTask.execute() */
@@ -98,7 +105,16 @@ public class ForecastFragment extends Fragment {
                 // Construct the URL for the OpenWeatherMap query
                 // Possible parameters are avaiable at OWM's forecast API page, at
                 // http://openweathermap.org/API#forecast
-                URL url = new URL("http://api.openweathermap.org/data/2.5/forecast/daily?q=" + postal_code + "&mode=json&units=metric&cnt=7&appid=" + BuildConfig.OPEN_WEATHER_MAP_API_KEY);
+                Uri builtUri = Uri.parse(FORECAST_BASE_URL)
+                        .buildUpon()
+                        .appendQueryParameter(QUERY_PARAM, postal_code)
+                        .appendQueryParameter(FORMAT_PARAM, "json")
+                        .appendQueryParameter(UNITS_PARAM, "metric")
+                        .appendQueryParameter(DAYS_PARAM, "7")
+                        .appendQueryParameter(APIKEY_PARAM, BuildConfig.OPEN_WEATHER_MAP_API_KEY)
+                        .build();
+
+                URL url = new URL(builtUri.toString());
 
                 // Create the request to OpenWeatherMap, and open the connection
                 urlConnection = (HttpURLConnection) url.openConnection();
