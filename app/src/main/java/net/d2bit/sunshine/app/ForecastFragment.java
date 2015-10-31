@@ -27,13 +27,14 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * A placeholder fragment containing a simple view.
  */
 public class ForecastFragment extends Fragment {
+
+   private final String DUMMY_POSTAL_CODE = "94043";
+    ArrayAdapter<String> mForecastAdapter = null;
 
     public ForecastFragment() {
     }
@@ -53,7 +54,7 @@ public class ForecastFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_refresh) {
-            new FetchWeatherTask().execute("94043");
+            new FetchWeatherTask().execute(DUMMY_POSTAL_CODE);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -63,23 +64,18 @@ public class ForecastFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        String[] data = {
-                "Today - Sunny - 31/17",
-                "Tomorrow - Foggy - 21/8",
-                "Weds - Cloudy - 22/17",
-                "Thurs - Rainy - 18/11",
-                "Fri - Foggy - 21/10",
-                "Sat - Cloudy - 23/18"
-        };
-        List<String> weekForecast = new ArrayList<String>(Arrays.asList(data));
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
-                R.layout.list_item_forecast, R.id.list_item_forecast_textview, weekForecast);
+        mForecastAdapter = new ArrayAdapter<String>(
+                getActivity(),
+                R.layout.list_item_forecast,
+                R.id.list_item_forecast_textview,
+                new ArrayList<String>()
+        );
+        new FetchWeatherTask().execute(DUMMY_POSTAL_CODE);
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         ListView forecastListView = (ListView) rootView.findViewById(R.id.listview_forecast);
-        forecastListView.setAdapter(adapter);
+        forecastListView.setAdapter(mForecastAdapter);
 
         return rootView;
     }
@@ -178,6 +174,17 @@ public class ForecastFragment extends Fragment {
             return null;
         }
 
+        @Override
+        protected void onPostExecute(String[] result) {
+            if (result != null) {
+                mForecastAdapter.clear();
+                // Can't use addAll(collection) till APIv11
+                for (String dayForecast : result) {
+                    mForecastAdapter.add(dayForecast);
+                }
+            }
+        }
+
         /**
          * The date/time conversion code is going to be moved outside the asynctask later,
          * so for convenience we're breaking it out into its own method now.
@@ -271,9 +278,6 @@ public class ForecastFragment extends Fragment {
                 resultStrs[i] = day + " - " + description + " - " + highAndLow;
             }
 
-            for (String s : resultStrs) {
-                Log.v(LOG_TAG, "Forecast entry: " + s);
-            }
             return resultStrs;
         }
     }
