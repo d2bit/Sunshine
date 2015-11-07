@@ -84,6 +84,7 @@ public class ForecastFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent detailActivityFragment = new Intent(getContext(), DetailActivity.class);
+                detailActivityFragment.putExtra("forecast", mForecastAdapter.getItem(position));
                 startActivity(detailActivityFragment);
             }
         });
