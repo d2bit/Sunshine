@@ -1,5 +1,6 @@
 package net.d2bit.sunshine.app;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
@@ -82,7 +83,8 @@ public class ForecastFragment extends Fragment {
         forecastListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getContext(), "I'm a TOAST!", Toast.LENGTH_LONG).show();
+                Intent detailActivityFragment = new Intent(getContext(), DetailActivity.class);
+                startActivity(detailActivityFragment);
             }
         });
 
