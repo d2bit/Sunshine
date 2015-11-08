@@ -29,6 +29,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="net.d2bit.sunshine.app.MainActivity" />
         </activity>
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_detail"
+            android:parentActivityName=".SettingsActivity"
+            android:theme="@style/AppTheme.NoActionBar" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="net.d2bit.sunshine.app.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
