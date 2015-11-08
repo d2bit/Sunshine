@@ -1,8 +1,10 @@
 package net.d2bit.sunshine.app;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.text.format.Time;
@@ -16,7 +18,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,7 +37,6 @@ import java.util.ArrayList;
  */
 public class ForecastFragment extends Fragment {
 
-   private final String DUMMY_POSTAL_CODE = "94043";
     ArrayAdapter<String> mForecastAdapter = null;
 
     public ForecastFragment() {
@@ -57,7 +57,7 @@ public class ForecastFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_refresh) {
-            new FetchWeatherTask().execute(DUMMY_POSTAL_CODE);
+            updateForecastData();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -73,7 +73,7 @@ public class ForecastFragment extends Fragment {
                 R.id.list_item_forecast_textview,
                 new ArrayList<String>()
         );
-        new FetchWeatherTask().execute(DUMMY_POSTAL_CODE);
+        updateForecastData();
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
@@ -92,6 +92,13 @@ public class ForecastFragment extends Fragment {
         return rootView;
     }
 
+    void updateForecastData() {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String location = sharedPref.getString(getString(R.string.pref_location_key), getString(R.string.pref_location_default));
+
+        new FetchWeatherTask().execute(location);
+    }
+
     public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
 
         private final String LOG_TAG = FetchWeatherTask.class.getSimpleName();
@@ -106,8 +113,6 @@ public class ForecastFragment extends Fragment {
         /** The system calls this to perform work in a worker thread and
          * delivers it the parameters given to AsyncTask.execute() */
         protected String[] doInBackground(String... params) {
-            String postal_code = params[0];
-
             // These two need to be declared outside the try/catch
             // so that they can be closed in the finally block.
             HttpURLConnection urlConnection = null;
@@ -122,7 +127,7 @@ public class ForecastFragment extends Fragment {
                 // http://openweathermap.org/API#forecast
                 Uri builtUri = Uri.parse(FORECAST_BASE_URL)
                         .buildUpon()
-                        .appendQueryParameter(QUERY_PARAM, postal_code)
+                        .appendQueryParameter(QUERY_PARAM, params[0])
                         .appendQueryParameter(FORMAT_PARAM, "json")
                         .appendQueryParameter(UNITS_PARAM, "metric")
                         .appendQueryParameter(DAYS_PARAM, Integer.toString(DAYS_NUMBER))
