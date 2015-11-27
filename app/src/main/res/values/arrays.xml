@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <array name="temperature_entries">
+    <array name="pref_units_entries">
         <item>METRIC</item>
         <item>IMPERIAL</item>
     </array>
-    <array name="temperature_values">
+    <array name="pref_units_values">
         <item>metric</item>
         <item>imperial</item>
     </array>

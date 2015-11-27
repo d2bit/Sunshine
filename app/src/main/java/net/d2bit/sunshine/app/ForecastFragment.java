@@ -218,8 +218,8 @@ public class ForecastFragment extends Fragment {
          */
         private String formatHighLows(double high, double low) {
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-            String defaultTempUnit = getString(R.string.pref_temperature_default);
-            String tempUnit = sharedPref.getString(getString(R.string.pref_temperature_key), defaultTempUnit);
+            String defaultTempUnit = getString(R.string.pref_units_metric);
+            String tempUnit = sharedPref.getString(getString(R.string.pref_units_key), defaultTempUnit);
 
             if (!tempUnit.equals(defaultTempUnit)) {
                 high = high * 1.8 + 32;
