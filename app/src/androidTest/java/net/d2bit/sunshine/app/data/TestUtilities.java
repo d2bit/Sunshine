@@ -64,16 +64,16 @@ public class TestUtilities extends AndroidTestCase {
         Students: You can uncomment this helper function once you have finished creating the
         LocationEntry part of the WeatherContract.
      */
-//    static ContentValues createNorthPoleLocationValues() {
-//        // Create a new map of values, where column names are the keys
-//        ContentValues testValues = new ContentValues();
-//        testValues.put(WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING, TEST_LOCATION);
-//        testValues.put(WeatherContract.LocationEntry.COLUMN_CITY_NAME, "North Pole");
-//        testValues.put(WeatherContract.LocationEntry.COLUMN_COORD_LAT, 64.7488);
-//        testValues.put(WeatherContract.LocationEntry.COLUMN_COORD_LONG, -147.353);
-//
-//        return testValues;
-//    }
+    static ContentValues createNorthPoleLocationValues() {
+        // Create a new map of values, where column names are the keys
+        ContentValues testValues = new ContentValues();
+        testValues.put(WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING, TEST_LOCATION);
+        testValues.put(WeatherContract.LocationEntry.COLUMN_CITY_NAME, "North Pole");
+        testValues.put(WeatherContract.LocationEntry.COLUMN_COORD_LAT, 64.7488);
+        testValues.put(WeatherContract.LocationEntry.COLUMN_COORD_LONG, -147.353);
+
+        return testValues;
+    }
 
     /*
         Students: You can uncomment this function once you have finished creating the

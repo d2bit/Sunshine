@@ -15,6 +15,7 @@
  */
 package net.d2bit.sunshine.app.data;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.test.AndroidTestCase;
@@ -112,21 +113,29 @@ public class TestDb extends AndroidTestCase {
     */
     public void testLocationTable() {
         // First step: Get reference to writable database
+        SQLiteDatabase db = new WeatherDbHelper(mContext).getWritableDatabase();
 
         // Create ContentValues of what you want to insert
         // (you can use the createNorthPoleLocationValues if you wish)
+        ContentValues testValues = TestUtilities.createNorthPoleLocationValues();
 
         // Insert ContentValues into database and get a row ID back
+        db.insert(WeatherContract.LocationEntry.TABLE_NAME, null, testValues);
 
         // Query the database and receive a Cursor back
+        Cursor locationCursor = db.query(WeatherContract.LocationEntry.TABLE_NAME, null, null, null, null, null, null);
 
         // Move the cursor to a valid database row
+        locationCursor.moveToFirst();
 
         // Validate data in resulting Cursor with the original ContentValues
         // (you can use the validateCurrentRecord function in TestUtilities to validate the
         // query if you like)
+        TestUtilities.validateCurrentRecord("Error: Location Query Validation Failed", locationCursor, testValues);
 
         // Finally, close the cursor and database
+        locationCursor.close();
+        db.close();
 
     }
 
