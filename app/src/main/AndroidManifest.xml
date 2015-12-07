@@ -38,6 +38,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="net.d2bit.sunshine.app.MainActivity" />
         </activity>
+        <provider
+            android:authorities="net.d2bit.sunshine.app"
+            android:name=".data.WeatherProvider" />
     </application>
 
 </manifest>
